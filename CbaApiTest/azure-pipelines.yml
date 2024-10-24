@@ -1,0 +1,20 @@
+﻿trigger:
+  batch: true
+  branches:
+    include:
+      - feature/*
+pr: none
+
+stages:
+  - stage: Dev
+    condition: succeeded()
+    jobs:
+      - job: Api_tests
+        pool: ubuntu-latest
+
+    steps:
+      - task: DotNetCoreCLI@2
+      displayName: "Integration tests"
+      inputs:
+        command: "test"
+        projects: $(System.DefaultWorkingDirectory)/**/CbaApiTest/*.csproj
